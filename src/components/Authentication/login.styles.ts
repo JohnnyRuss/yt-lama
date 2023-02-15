@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const LoginContainer = styled.div`
+export const AuthContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,7 +8,7 @@ export const LoginContainer = styled.div`
 
   .auth-box {
     width: 30rem;
-    height: 40rem;
+    min-height: 40rem;
     background: ${({ theme }) => theme.colors.darkGray};
     padding: 2rem 1rem;
     display: flex;
@@ -48,6 +48,8 @@ export const LoginContainer = styled.div`
       background: inherit;
       outline: none;
       border: 1px solid ${({ theme }) => theme.colors.gray};
+      color: ${({ theme }) =>
+        theme.mode === "dark" ? theme.colors.txt : theme.colors.bg};
     }
   }
 

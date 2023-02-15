@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Nav } from "./Nav.styles";
 
-import { ThemeContext } from "../../Theme";
+import { useIsAuthorised } from "../../hooks";
 
-import { AiFillHome } from "react-icons/ai";
 import {
   MdExplore,
   MdSubscriptions,
@@ -15,18 +13,22 @@ import {
   MdMovieFilter,
   MdOutlineLiveTv,
 } from "react-icons/md";
+import { AiFillHome } from "react-icons/ai";
 import { IoLogoGameControllerB } from "react-icons/io";
 import { ImNewspaper } from "react-icons/im";
-import { FaRegUserCircle } from "react-icons/fa";
+import { ThemeContext } from "../../Theme";
+import { Nav } from "./Nav.styles";
+import UserAuthAndLogout from "./UserAuthAndLogout";
 
 const Navigation: React.FC = () => {
   const { changeTheme } = useContext(ThemeContext);
+  const isAuthorised = useIsAuthorised();
 
   return (
     <Nav>
       <ul className="features-list">
         <li>
-          <Link to="" className="list-item">
+          <Link to="/home" className="list-item">
             <span className="icon-box">
               <AiFillHome />
             </span>
@@ -34,21 +36,23 @@ const Navigation: React.FC = () => {
           </Link>
         </li>
         <li>
-          <Link to="" className="list-item">
+          <Link to="/explore" className="list-item">
             <span className="icon-box">
               <MdExplore />
             </span>
             <span>explore</span>
           </Link>
         </li>
-        <li>
-          <Link to="" className="list-item">
-            <span className="icon-box">
-              <MdSubscriptions />
-            </span>
-            <span>subscribtions</span>
-          </Link>
-        </li>
+        {isAuthorised && (
+          <li>
+            <Link to="/subscribtions" className="list-item">
+              <span className="icon-box">
+                <MdSubscriptions />
+              </span>
+              <span>subscribtions</span>
+            </Link>
+          </li>
+        )}
       </ul>
       <ul className="features-list">
         <li>
@@ -68,15 +72,7 @@ const Navigation: React.FC = () => {
           </Link>
         </li>
       </ul>
-      <div className="auth-box">
-        <p>Sign in to like videos, comment, and subscribe.</p>
-        <Link to="/auth/login" className="sign-btn">
-          <span className="sign-icon--box">
-            <FaRegUserCircle />
-          </span>
-          <span>sign in</span>
-        </Link>
-      </div>
+      <UserAuthAndLogout isAuthorised={isAuthorised} />
       <ul className="features-list">
         <li>
           <Link to="" className="list-item">

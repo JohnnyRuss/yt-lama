@@ -1,23 +1,16 @@
 import styled from "styled-components";
 
-const thumb_h = "28rem";
-const thumb_w = "35rem";
 const thumb_details_h = "8rem";
+const thumb_h = "28rem";
 
-export const FeedContainer = styled.div`
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(${thumb_w}, 1fr));
-  grid-auto-rows: ${thumb_h};
-  gap: 1rem;
-  padding: 0.75rem;
+export const CardContainer = styled.div`
+  width: min(100%, 40rem);
 
   .feed-thumb {
     height: ${thumb_h};
     width: 100%;
     aspect-ratio: 9/16;
   }
-
   .thumb-fig {
     height: calc(${thumb_h} - ${thumb_details_h});
     width: 100%;
@@ -41,8 +34,10 @@ export const FeedContainer = styled.div`
     gap: 1rem;
 
     .thumb-channel__fig {
-      width: 3.2rem;
-      height: 3.2rem;
+      min-width: 3.2rem;
+      min-height: 3.2rem;
+      max-width: 3.2rem;
+      max-height: 3.2rem;
       aspect-ratio: 1/1;
       border-radius: 100%;
       overflow: hidden;
