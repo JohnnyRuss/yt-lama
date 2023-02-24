@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useAppDispatch } from "../store/hooks";
 import {
   loginQuery,
-  googleLoginQuery as googleLoginQuery,
+  googleLoginQuery,
   GoogleLoginArgsT,
   logoutQuery,
 } from "../store/reducers/thunks/authSlice.thunks";

@@ -14,7 +14,7 @@ export const axiosPrivateQuery = axios.create({
 const refresh = axios.create({
   baseURL: "http://localhost:4001/api/v1/authentication/refresh",
   withCredentials: true,
-  method: "GET",
+  method: "POST",
 });
 
 axiosPrivateQuery.interceptors.request.use(async (config) =>
@@ -27,7 +27,7 @@ function tokenExchange(config) {
   const token = getJWT();
 
   const decodedToken = token ? decode(token) : null;
-  const exp = decodedToken.exp;
+  const exp = decodedToken?.exp;
 
   if (Math.floor(Date.now() / 1000) > exp) {
     if (!exchangePromise)

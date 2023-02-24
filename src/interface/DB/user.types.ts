@@ -8,6 +8,7 @@ export interface UserT {
   updatedAt: string;
   __v: number;
   avatar: string;
+  subscribedUsers: string[];
 }
 
 export interface UserLabelT {
@@ -16,4 +17,5 @@ export interface UserLabelT {
   email: string;
   avatar: string;
   subscribers: number;
+  subscribedUsers: string[];
 }

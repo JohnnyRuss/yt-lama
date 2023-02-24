@@ -1,17 +1,17 @@
 import React from "react";
+import { useAppSelector } from "../../../store/hooks";
 
-interface FrameType {}
+const Frame: React.FC = () => {
+  const { url, title } = useAppSelector(({ videos }) => ({
+    url: videos.video?.videoUrl,
+    title: videos.video?.title,
+  }));
 
-const Frame: React.FC<FrameType> = (props) => {
   return (
     <div className="video-box">
       <iframe
-        // width="100%"
-        // height="720"
-        // src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
-        src="https://www.youtube.com/embed/fKKNPLowteY"
-        title="YouTube video player"
-        // fr="0"
+        src={url}
+        title={title}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
         className="frame"

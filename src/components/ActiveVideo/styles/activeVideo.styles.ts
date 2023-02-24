@@ -18,7 +18,6 @@ export const MainThread = styled.div`
   .video-box {
     height: 30vw;
     width: 100%;
-    background: red;
 
     .frame {
       width: 100%;
@@ -105,6 +104,17 @@ export const MainThread = styled.div`
       padding: 0.75rem 2rem;
       border-radius: 0.5rem;
       text-transform: capitalize;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      svg {
+        font-size: 1.8rem;
+      }
+
+      &.subscribed {
+        background: ${({ theme }) => theme.colors.gray};
+      }
     }
   }
 

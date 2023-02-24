@@ -6,8 +6,8 @@ export interface VideoT {
   videoUrl: string;
   views: number;
   tags: string[];
-  likes: any[];
-  dislikes: any[];
+  likes: string[];
+  dislikes: string[];
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -18,4 +18,5 @@ interface VideoUserT {
   _id: string;
   username: string;
   avatar: string;
+  subscribers: number;
 }

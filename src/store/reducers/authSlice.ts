@@ -42,6 +42,23 @@ const authSlice = createSlice({
         message: message,
       };
     },
+
+    addNewSubscribedChanel(
+      state,
+      { payload: { userId } }: PayloadAction<{ userId: string }>
+    ) {
+      state.user?.subscribedUsers.push(userId);
+    },
+
+    removeSubscribedChanel(
+      state,
+      { payload: { userId } }: PayloadAction<{ userId: string }>
+    ) {
+      if (state.user && Array.isArray(state.user.subscribedUsers))
+        state.user.subscribedUsers = state.user?.subscribedUsers.filter(
+          (user) => user !== userId
+        );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -136,4 +153,8 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
-export const { setGoogleAuthError } = authSlice.actions;
+export const {
+  setGoogleAuthError,
+  addNewSubscribedChanel,
+  removeSubscribedChanel,
+} = authSlice.actions;

@@ -1,15 +1,21 @@
 import React from "react";
+import { useAppSelector } from "../../../store/hooks";
+import formatDate from "../../../lib/formatDate";
 
-interface ViewsAndDateType {}
+const ViewsAndDate: React.FC = () => {
+  const { views, createdAt } = useAppSelector(({ videos }) => ({
+    views: videos.video?.views,
+    createdAt: videos.video?.createdAt,
+  }));
 
-const ViewsAndDate: React.FC<ViewsAndDateType> = (props) => {
   return (
     <div className="view--actions__container__views">
       <div className="views">
-        <span>7,948,154</span>
+        <span>{views?.toLocaleString()}</span>
+        &nbsp;
         <span>views</span>
       </div>
-      <span className="date">Jun 22,2022</span>
+      <span className="date">{formatDate(createdAt, "verbal")}</span>
     </div>
   );
 };

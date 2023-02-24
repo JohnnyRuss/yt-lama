@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { format } from "timeago.js";
+import TimeAgo from "react-timeago";
 
 import { VideoT } from "../../../interface/DB/video.types";
 
@@ -13,7 +13,7 @@ interface CardType {
 const Card: React.FC<CardType> = ({ video }) => {
   return (
     <CardContainer>
-      <Link to="/:id" className="feed-thumb">
+      <Link to={`/${video._id}`} className="feed-thumb">
         <figure className="thumb-fig">
           <img src={video.thumbnail} alt={video.title} />
         </figure>
@@ -32,7 +32,7 @@ const Card: React.FC<CardType> = ({ video }) => {
                 <span>&nbsp;views</span>
               </div>
               &nbsp;•&nbsp;
-              <span>{format(new Date(video.createdAt || ""))}</span>
+              <TimeAgo date={video.createdAt} />
             </div>
           </div>
         </div>

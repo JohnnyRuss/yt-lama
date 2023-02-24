@@ -26,11 +26,16 @@ export const CommentsContainer = styled.div`
       ${userFig}
     }
 
+    .text-field--form {
+      width: 100%;
+    }
+
     .text-field {
       width: 100%;
       resize: none;
       border-radius: 0.5rem;
       padding: 0.5rem;
+      outline: none;
     }
   }
 
