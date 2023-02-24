@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import {
   getStorage,
@@ -23,9 +23,31 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 
 export default firebaseApp;
+
+// auth
 export const firebaseAuth = getAuth();
 export const firebaseGoogleAuthProvider = new GoogleAuthProvider();
 
+export async function signInWithGooglePopUp() {
+  try {
+    const { user } = await signInWithPopup(
+      firebaseAuth,
+      firebaseGoogleAuthProvider
+    );
+
+    const userCredentials = {
+      username: user.displayName || "",
+      email: user.email || "",
+      avatar: user.photoURL || "",
+    };
+
+    return userCredentials;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// cloud  storage
 export function uploadFile({
   file,
   progresSetter,

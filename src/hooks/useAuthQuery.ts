@@ -7,8 +7,7 @@ import {
   logoutQuery,
 } from "../store/reducers/thunks/authSlice.thunks";
 import { setGoogleAuthError } from "../store/reducers/authSlice";
-import { firebaseAuth, firebaseGoogleAuthProvider } from "../store/firebase";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithGooglePopUp } from "../store/firebase";
 
 type UseAuthQueryT =
   | {
@@ -46,20 +45,12 @@ export default function useAuthQuery(args?: UseAuthQueryT) {
     e.preventDefault();
 
     try {
-      const results = await signInWithPopup(
-        firebaseAuth,
-        firebaseGoogleAuthProvider
-      );
+      const userCredentials: GoogleLoginArgsT | undefined =
+        await signInWithGooglePopUp();
 
-      const user = results.user;
+      if (!userCredentials) return;
 
-      const userCredentials: GoogleLoginArgsT = {
-        username: user.displayName || "",
-        email: user.email || "",
-        avatar: user.photoURL || "",
-      };
-
-      user && dispatch(googleLoginQuery(userCredentials));
+      dispatch(googleLoginQuery(userCredentials));
     } catch (error: any) {
       const errorCode = error?.code;
       const errorMessage = error?.message;
