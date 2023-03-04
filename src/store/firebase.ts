@@ -1,12 +1,18 @@
 import { initializeApp } from "firebase/app";
 
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  // AuthError,
+} from "firebase/auth";
 
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 
 const firebaseConfig = {
@@ -22,11 +28,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-export default firebaseApp;
-
 // auth
-export const firebaseAuth = getAuth();
-export const firebaseGoogleAuthProvider = new GoogleAuthProvider();
+const firebaseAuth = getAuth(firebaseApp);
+const firebaseGoogleAuthProvider = new GoogleAuthProvider();
+
+// interface GoogleAuthErrorT {
+//   code: number;
+//   message: string;
+//   email: string;
+// }
 
 export async function signInWithGooglePopUp() {
   try {
@@ -42,12 +52,18 @@ export async function signInWithGooglePopUp() {
     };
 
     return userCredentials;
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
+    // const err: AuthError = error;
+    throw Error(error);
   }
 }
 
 // cloud  storage
+const storage = getStorage(firebaseApp);
+const getStorageRef: any = (configuredFileName: string) =>
+  ref(storage, configuredFileName);
+
 export function uploadFile({
   file,
   progresSetter,
@@ -57,13 +73,11 @@ export function uploadFile({
   progresSetter: (percentage: number) => void;
   urlSetter: (url: string) => void;
 }) {
-  const storage = getStorage(firebaseApp);
-
   const configuredFileName = `${new Date().getTime()}-${
-    file.name || "unknown"
+    file.name.split(" ").join("-") || "unknown"
   }`;
 
-  const storageRef = ref(storage, configuredFileName);
+  const storageRef = getStorageRef(configuredFileName);
   const uploadTask = uploadBytesResumable(storageRef, file);
 
   uploadTask.on(
@@ -81,8 +95,9 @@ export function uploadFile({
           break;
       }
     },
-    (error) => {
+    (error: any) => {
       console.log(error);
+      throw Error(error);
     },
     () => {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -90,4 +105,13 @@ export function uploadFile({
       });
     }
   );
+}
+
+export function deleteFile(fileName: string) {
+  const storageRef = getStorageRef(fileName);
+  deleteObject(storageRef)
+    .then(() => {
+      console.log("file deleted succssfuly");
+    })
+    .catch((err) => console.log(err));
 }

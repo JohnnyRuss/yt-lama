@@ -4,6 +4,8 @@ import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 import {
   likeVideo,
   dislikeVideo,
+  saveVideo,
+  unsaveVideo,
 } from "../../../store/reducers/thunks/videoSlice.thunks";
 
 import {
@@ -11,6 +13,7 @@ import {
   AiFillLike,
   AiOutlineDislike,
   AiFillDislike,
+  AiFillMinusCircle,
 } from "react-icons/ai";
 import { BiShare } from "react-icons/bi";
 import { MdOutlineAddCircle } from "react-icons/md";
@@ -20,11 +23,14 @@ const VideoActions: React.FC = () => {
 
   const userID = useAppSelector(({ auth }) => auth.user?._id);
 
-  const { likes, dislikes, id } = useAppSelector(({ videos }) => ({
-    likes: videos.video?.likes,
-    dislikes: videos.video?.dislikes,
-    id: videos.video?._id,
-  }));
+  const { likes, dislikes, id, bookmarksIds } = useAppSelector(
+    ({ videos }) => ({
+      likes: videos.video?.likes,
+      dislikes: videos.video?.dislikes,
+      id: videos.video?._id,
+      bookmarksIds: videos.bookmarksIds,
+    })
+  );
 
   const [existingUserReaction, setExistingUserReaction] = useState<
     "like" | "dislike" | "passive"
@@ -39,6 +45,12 @@ const VideoActions: React.FC = () => {
         : "passive"
     );
   }, [likes, dislikes, userID]);
+
+  function saveVideoHandler() {
+    if (bookmarksIds.includes(id || ""))
+      dispatch(unsaveVideo({ videoId: id || "" }));
+    else dispatch(saveVideo({ videoId: id || "" }));
+  }
 
   return (
     <div className="view--actions__container__actions">
@@ -66,19 +78,21 @@ const VideoActions: React.FC = () => {
         <span className="label">{dislikes?.length.toLocaleString()}</span>
       </div>
 
-      <div className="actionField">
-        <button className="action-btn">
-          <BiShare />
-        </button>
+      <button className="action-btn">
+        <BiShare />
         <span className="label">share</span>
-      </div>
+      </button>
 
-      <div className="actionField">
-        <button className="action-btn">
+      <button className="action-btn" onClick={saveVideoHandler}>
+        {id && bookmarksIds.includes(id) ? (
+          <AiFillMinusCircle />
+        ) : (
           <MdOutlineAddCircle />
-        </button>
-        <span className="label">save</span>
-      </div>
+        )}
+        <span className="label">
+          {id && bookmarksIds.includes(id) ? "unsave" : "save"}
+        </span>
+      </button>
     </div>
   );
 };

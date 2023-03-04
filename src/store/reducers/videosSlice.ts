@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { VideoT } from "../../interface/DB/video.types";
+import { stat } from "fs";
+import { VideoT, VideoLabelT } from "../../interface/DB/video.types";
 import {
   KnownErrorT,
   ReactOnVideoResT,
@@ -11,6 +12,12 @@ import {
   likeVideo,
   dislikeVideo,
   uploadVideo,
+  getBookmarks,
+  saveVideo,
+  unsaveVideo,
+  getBookmarksIds,
+  getUserVideos,
+  deleteVideo,
 } from "./thunks/videoSlice.thunks";
 
 interface StateT {
@@ -24,8 +31,12 @@ interface StateT {
     message: string;
     error: boolean;
   };
-  videos: VideoT[];
+  uploadProgress: {
+    proccess: "passive" | "inProccess" | "success";
+  };
+  videos: VideoLabelT[];
   video: VideoT | null;
+  bookmarksIds: string[];
 }
 
 const initialState: StateT = {
@@ -39,8 +50,12 @@ const initialState: StateT = {
     loading: false,
     message: "",
   },
+  uploadProgress: {
+    proccess: "passive",
+  },
   videos: [],
   video: null,
+  bookmarksIds: [],
 };
 
 interface EncreaseChanleSubscribersNumT {
@@ -66,6 +81,10 @@ const videosSlice = createSlice({
       if (state.video?.user._id !== userId) return;
       state.video.user.subscribers -= 1;
     },
+
+    resetUploadProgress(state) {
+      state.uploadProgress.proccess = "passive";
+    },
   },
   extraReducers(builder) {
     builder
@@ -77,7 +96,7 @@ const videosSlice = createSlice({
       })
       .addCase(
         getRandomVideos.fulfilled,
-        (state, { payload }: PayloadAction<VideoT[]>) => {
+        (state, { payload }: PayloadAction<VideoLabelT[]>) => {
           state.videos = payload;
 
           state.loadingStatus = {
@@ -105,7 +124,7 @@ const videosSlice = createSlice({
       })
       .addCase(
         getTrendingVideos.fulfilled,
-        (state, { payload }: PayloadAction<VideoT[]>) => {
+        (state, { payload }: PayloadAction<VideoLabelT[]>) => {
           state.videos = payload;
 
           state.loadingStatus = {
@@ -133,7 +152,7 @@ const videosSlice = createSlice({
       })
       .addCase(
         getSubscribedVideos.fulfilled,
-        (state, { payload }: PayloadAction<VideoT[]>) => {
+        (state, { payload }: PayloadAction<VideoLabelT[]>) => {
           state.videos = payload;
 
           state.loadingStatus = {
@@ -152,6 +171,73 @@ const videosSlice = createSlice({
             message: payload?.message || "",
           };
         }
+      )
+      .addCase(getUserVideos.pending, (state, _) => {
+        state.loadingStatus = {
+          ...state.loadingStatus,
+          loading: true,
+        };
+      })
+      .addCase(
+        getUserVideos.fulfilled,
+        (state, { payload }: PayloadAction<VideoLabelT[]>) => {
+          state.videos = payload;
+
+          state.loadingStatus = {
+            ...state.loadingStatus,
+            loading: false,
+          };
+        }
+      )
+      .addCase(
+        getUserVideos.rejected,
+        (state, { payload }: PayloadAction<KnownErrorT>) => {
+          state.loadingStatus = {
+            ...state.loadingStatus,
+            loading: false,
+            error: true,
+            message: payload?.message || "",
+          };
+        }
+      )
+      .addCase(getBookmarks.pending, (state, _) => {
+        state.loadingStatus = {
+          ...state.loadingStatus,
+          loading: true,
+        };
+      })
+      .addCase(
+        getBookmarks.fulfilled,
+        (state, { payload }: PayloadAction<VideoLabelT[]>) => {
+          state.videos = payload;
+
+          state.loadingStatus = {
+            ...state.loadingStatus,
+            loading: false,
+          };
+        }
+      )
+      .addCase(
+        getBookmarks.rejected,
+        (state, { payload }: PayloadAction<KnownErrorT>) => {
+          state.loadingStatus = {
+            ...state.loadingStatus,
+            loading: false,
+            error: true,
+            message: payload?.message || "",
+          };
+        }
+      )
+      .addCase(getBookmarksIds.pending, (state, _) => {})
+      .addCase(
+        getBookmarksIds.fulfilled,
+        (state, { payload }: PayloadAction<string[]>) => {
+          state.bookmarksIds = payload;
+        }
+      )
+      .addCase(
+        getBookmarksIds.rejected,
+        (state, { payload }: PayloadAction<KnownErrorT>) => {}
       )
       .addCase(getVideo.pending, (state, _) => {
         state.loadingStatus = {
@@ -180,6 +266,17 @@ const videosSlice = createSlice({
           };
         }
       )
+      .addCase(deleteVideo.pending, (state, _) => {})
+      .addCase(
+        deleteVideo.fulfilled,
+        (state, { payload }: PayloadAction<string>) => {
+          state.videos = state.videos.filter((v) => v._id !== payload);
+        }
+      )
+      .addCase(
+        deleteVideo.rejected,
+        (state, { payload }: PayloadAction<KnownErrorT>) => {}
+      )
       .addCase(getRelatedVideos.pending, (state, _) => {
         state.relatedVideosLoadingStatus = {
           ...state.loadingStatus,
@@ -188,7 +285,7 @@ const videosSlice = createSlice({
       })
       .addCase(
         getRelatedVideos.fulfilled,
-        (state, { payload }: PayloadAction<VideoT[]>) => {
+        (state, { payload }: PayloadAction<VideoLabelT[]>) => {
           state.videos = payload;
           state.relatedVideosLoadingStatus = {
             ...state.loadingStatus,
@@ -226,6 +323,37 @@ const videosSlice = createSlice({
         likeVideo.rejected,
         (state, { payload }: PayloadAction<KnownErrorT>) => {}
       )
+      .addCase(saveVideo.pending, (state, _) => {})
+      .addCase(
+        saveVideo.fulfilled,
+        (
+          state,
+          { payload: { videoId } }: PayloadAction<{ videoId: string }>
+        ) => {
+          state.bookmarksIds.push(videoId);
+        }
+      )
+      .addCase(
+        saveVideo.rejected,
+        (state, { payload }: PayloadAction<KnownErrorT>) => {}
+      )
+      .addCase(unsaveVideo.pending, (state, _) => {})
+      .addCase(
+        unsaveVideo.fulfilled,
+        (
+          state,
+          { payload: { videoId } }: PayloadAction<{ videoId: string }>
+        ) => {
+          state.videos = state.videos.filter((video) => video._id !== videoId);
+          state.bookmarksIds = state.bookmarksIds.filter(
+            (bk) => bk !== videoId
+          );
+        }
+      )
+      .addCase(
+        unsaveVideo.rejected,
+        (state, { payload }: PayloadAction<KnownErrorT>) => {}
+      )
       .addCase(dislikeVideo.pending, (state, _) => {})
       .addCase(
         dislikeVideo.fulfilled,
@@ -245,20 +373,28 @@ const videosSlice = createSlice({
         dislikeVideo.rejected,
         (state, { payload }: PayloadAction<KnownErrorT>) => {}
       )
-      .addCase(uploadVideo.pending, (state, _) => {})
+      .addCase(uploadVideo.pending, (state, _) => {
+        state.uploadProgress.proccess = "inProccess";
+      })
       .addCase(
         uploadVideo.fulfilled,
-        (state, { payload }: PayloadAction<VideoT>) => {
-          // state.videos.unshift(payload);
+        (state, { payload }: PayloadAction<VideoLabelT>) => {
+          state.videos.unshift(payload);
+          state.uploadProgress.proccess = "success";
         }
       )
       .addCase(
         uploadVideo.rejected,
-        (state, { payload }: PayloadAction<KnownErrorT>) => {}
+        (state, { payload }: PayloadAction<KnownErrorT>) => {
+          state.uploadProgress.proccess = "passive";
+        }
       );
   },
 });
 
 export default videosSlice.reducer;
-export const { encreaseChanelSubscribers, decreaseChanelSubscribers } =
-  videosSlice.actions;
+export const {
+  encreaseChanelSubscribers,
+  decreaseChanelSubscribers,
+  resetUploadProgress,
+} = videosSlice.actions;

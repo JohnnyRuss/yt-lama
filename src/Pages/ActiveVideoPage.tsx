@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   getVideo,
   getRelatedVideos,
+  getBookmarksIds,
 } from "../store/reducers/thunks/videoSlice.thunks";
 
 import ActiveVideo from "../components/ActiveVideo/ActiveVideo";
@@ -19,6 +20,7 @@ const ActiveVideoPage: React.FC = () => {
 
   useEffect(() => {
     videoId && dispatch(getVideo({ id: videoId }));
+    dispatch(getBookmarksIds());
   }, [videoId]);
 
   useEffect(() => {

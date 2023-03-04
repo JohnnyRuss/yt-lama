@@ -50,17 +50,29 @@ export const MainThread = styled.div`
         display: flex;
         align-items: center;
         gap: 0.5rem;
+      }
 
-        .action-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 2.2rem;
-        }
+      .action-btn,
+      .actionField .action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+      }
 
-        .label {
-          text-transform: capitalize;
+      .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.6rem;
+        
+        svg {
+          font-size: 2rem;
         }
+      }
+
+      .action-btn .label {
+        text-transform: capitalize;
       }
     }
   }

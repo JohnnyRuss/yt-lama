@@ -15,13 +15,14 @@ import {
 } from "react-icons/md";
 import { AiFillHome } from "react-icons/ai";
 import { IoLogoGameControllerB } from "react-icons/io";
-import { ImNewspaper } from "react-icons/im";
+import { ImNewspaper, ImBookmarks } from "react-icons/im";
+import { BiSun, BiMoon } from "react-icons/bi";
 import { ThemeContext } from "../../Theme";
 import { Nav } from "./Nav.styles";
 import UserAuthAndLogout from "./UserAuthAndLogout";
 
 const Navigation: React.FC = () => {
-  const { changeTheme } = useContext(ThemeContext);
+  const { changeTheme, mode } = useContext(ThemeContext);
   const isAuthorised = useIsAuthorised();
 
   return (
@@ -44,16 +45,27 @@ const Navigation: React.FC = () => {
           </Link>
         </li>
         {isAuthorised && (
-          <li>
-            <Link to="/subscribtions" className="list-item">
-              <span className="icon-box">
-                <MdSubscriptions />
-              </span>
-              <span>subscribtions</span>
-            </Link>
-          </li>
+          <>
+            <li>
+              <Link to="/subscribtions" className="list-item">
+                <span className="icon-box">
+                  <MdSubscriptions />
+                </span>
+                <span>subscribtions</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/bookmarks" className="list-item">
+                <span className="icon-box">
+                  <ImBookmarks />
+                </span>
+                <span>bookmarks</span>
+              </Link>
+            </li>
+          </>
         )}
       </ul>
+
       <ul className="features-list">
         <li>
           <Link to="" className="list-item">
@@ -72,7 +84,14 @@ const Navigation: React.FC = () => {
           </Link>
         </li>
       </ul>
+
+      <button onClick={changeTheme} className="theme-btn">
+        <span>{mode === "dark" ? <BiMoon /> : <BiSun />}</span>
+        <span>change to {mode === "dark" ? "day" : "night"} mode</span>
+      </button>
+
       <UserAuthAndLogout isAuthorised={isAuthorised} />
+
       <ul className="features-list">
         <li>
           <Link to="" className="list-item">
@@ -123,7 +142,6 @@ const Navigation: React.FC = () => {
           </Link>
         </li>
       </ul>
-      <button onClick={changeTheme}>change theme</button>
     </Nav>
   );
 };

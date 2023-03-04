@@ -66,6 +66,18 @@ export const Nav = styled.nav`
       font-size: 2.2rem;
     }
   }
+
+  .theme-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: capitalize;
+    padding: 0.5rem;
+
+    svg {
+      font-size: 2rem;
+    }
+  }
 `;
 
 export const UserAuthAndLogoutContainer = styled.div`

@@ -37,8 +37,8 @@ function tokenExchange(config) {
           return data.accessToken;
         })
         .catch((err) => {
-          if (err.response.status === 401)
-            localStorage.removeItem(PASSPORT_KEY);
+          // if (err.response.status === 401)
+          //   localStorage.removeItem(PASSPORT_KEY);
           exchangePromise = null;
           return "";
         });

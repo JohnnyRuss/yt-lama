@@ -10,6 +10,7 @@ interface ProviderT {
 
 interface ContextT {
   changeTheme: () => void;
+  mode: Mode;
 }
 
 interface AppThemeT {
@@ -19,6 +20,7 @@ interface AppThemeT {
 
 export const ThemeContext = createContext<ContextT>({
   changeTheme: () => {},
+  mode: "light",
 });
 
 const Theme: React.FC<ProviderT> = ({ children }) => {
@@ -72,7 +74,7 @@ const Theme: React.FC<ProviderT> = ({ children }) => {
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ changeTheme }}>
+    <ThemeContext.Provider value={{ changeTheme, mode: theme.mode }}>
       <ThemeProvider theme={theme.theme}>
         <AppStyles />
         {children}

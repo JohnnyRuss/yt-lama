@@ -2,15 +2,27 @@ import React from "react";
 import { Link } from "react-router-dom";
 import TimeAgo from "react-timeago";
 
-import { VideoT } from "../../../interface/DB/video.types";
+import { useAppSelector } from "../../../store/hooks";
+
+import { VideoLabelT } from "../../../interface/DB/video.types";
 
 import { CardContainer } from "./card.styles";
+import { MdDelete } from "react-icons/md";
 
+import { GetCredentialsForDeleteFileT } from "../../Profile/Profile";
 interface CardType {
-  video: VideoT;
+  video: VideoLabelT;
+  deletable?: boolean;
+  onCardDelete?: (args: GetCredentialsForDeleteFileT) => void;
 }
 
-const Card: React.FC<CardType> = ({ video }) => {
+const Card: React.FC<CardType> = ({
+  video,
+  deletable = false,
+  onCardDelete,
+}) => {
+  const activeUserID = useAppSelector(({ auth }) => auth.user?._id);
+
   return (
     <CardContainer>
       <Link to={`/${video._id}`} className="feed-thumb">
@@ -21,6 +33,7 @@ const Card: React.FC<CardType> = ({ video }) => {
           <figure className="thumb-channel__fig">
             <img src={video.user.avatar} alt={video.user.username} />
           </figure>
+
           <div className="thumb-identifier">
             <span className="thumb-identifier__title">{video.title}</span>
             <span className="thumb-identifier__channel">
@@ -37,6 +50,25 @@ const Card: React.FC<CardType> = ({ video }) => {
           </div>
         </div>
       </Link>
+
+      {deletable && activeUserID === video.user._id && (
+        <button
+          className="delete-btn"
+          onClick={() =>
+            onCardDelete &&
+            onCardDelete({
+              thumbnail: video.thumbnail,
+              videoId: video._id,
+              videoUrl: video.videoUrl,
+            })
+          }
+        >
+          <span>
+            <MdDelete />
+          </span>
+          <span>delete video</span>
+        </button>
+      )}
     </CardContainer>
   );
 };

@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
 import { uploadFile } from "../../store/firebase";
 
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { uploadVideo } from "../../store/reducers/thunks/videoSlice.thunks";
+import { resetUploadProgress } from "../../store/reducers/videosSlice";
 
 import { UploadContainer } from "./Nav.styles";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -13,6 +15,10 @@ interface UploadModalType {
 
 const UploadModal: React.FC<UploadModalType> = ({ setOpenModal }) => {
   const dispatch = useAppDispatch();
+
+  const progress = useAppSelector(
+    ({ videos }) => videos.uploadProgress.proccess
+  );
 
   const [video, setVideo] = useState<File | null>();
   const [videoProcessPercentage, setVideoProcessPercentage] =
@@ -59,7 +65,7 @@ const UploadModal: React.FC<UploadModalType> = ({ setOpenModal }) => {
 
     dispatch(
       uploadVideo({
-        imageUrl,
+        thumbnail: imageUrl,
         videoUrl,
         title,
         description,
@@ -83,6 +89,13 @@ const UploadModal: React.FC<UploadModalType> = ({ setOpenModal }) => {
 
     setTags("");
   }
+
+  useEffect(() => {
+    if (progress === "success") {
+      setOpenModal(false);
+      dispatch(resetUploadProgress());
+    }
+  }, [progress]);
 
   return (
     <UploadContainer onClick={() => setOpenModal(false)}>

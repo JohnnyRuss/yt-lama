@@ -11,11 +11,11 @@ export const CardContainer = styled.div`
     width: 100%;
     aspect-ratio: 9/16;
   }
+
   .thumb-fig {
     height: calc(${thumb_h} - ${thumb_details_h});
     width: 100%;
     overflow: hidden;
-    background: red;
     border-radius: 1rem;
 
     img {
@@ -32,6 +32,7 @@ export const CardContainer = styled.div`
     display: flex;
     align-items: flex-start;
     gap: 1rem;
+    position: relative;
 
     .thumb-channel__fig {
       min-width: 3.2rem;
@@ -75,6 +76,21 @@ export const CardContainer = styled.div`
         gap: 0.5rem;
         font-size: ${({ theme }) => theme.size.xsm};
       }
+    }
+  }
+
+  .delete-btn {
+    background: red;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: capitalize;
+    margin-left: auto;
+
+    svg {
+      font-size: 2rem;
     }
   }
 `;

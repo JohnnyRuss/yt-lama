@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getComments, addComment } from "./thunks/commentsSlice.thunks";
+import {
+  getComments,
+  addComment,
+  deleteComment,
+  updateComment,
+} from "./thunks/commentsSlice.thunks";
 import { CommentT } from "../../interface/DB/comment.types";
 
 interface StateT {
@@ -31,7 +36,29 @@ const commentsSlice = createSlice({
           state.comments.unshift(payload);
         }
       )
-      .addCase(addComment.rejected, (state) => {});
+      .addCase(addComment.rejected, (state) => {})
+      .addCase(deleteComment.pending, (state) => {})
+      .addCase(
+        deleteComment.fulfilled,
+        (state, { payload }: PayloadAction<string>) => {
+          state.comments = state.comments.filter(
+            (comm) => comm._id !== payload
+          );
+        }
+      )
+      .addCase(deleteComment.rejected, (state) => {})
+      .addCase(updateComment.pending, (state) => {})
+      .addCase(
+        updateComment.fulfilled,
+        (state, { payload }: PayloadAction<CommentT>) => {
+          const i = state.comments.findIndex(
+            (comm) => comm._id === payload._id
+          );
+
+          state.comments[i] = payload;
+        }
+      )
+      .addCase(updateComment.rejected, (state) => {});
   },
 });
 
