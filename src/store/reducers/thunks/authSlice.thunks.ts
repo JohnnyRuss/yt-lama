@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { axiosPrivateQuery, axiosPublicQuery } from "../../axiosConfig";
+import { axiosPrivateQuery } from "../../axiosConfig";
 import { AxiosError } from "axios";
 import { PASSPORT_KEY } from "../../../lib/config";
 

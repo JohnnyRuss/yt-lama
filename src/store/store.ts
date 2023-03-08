@@ -4,10 +4,7 @@ import root from "./reducers/root";
 
 export const store = configureStore({
   reducer: root,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 export const persistore = persistStore(store);
