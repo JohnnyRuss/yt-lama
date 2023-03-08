@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { useAppSelector, useAppDispatch } from "../../../store/hooks";
+import { useIsAuthorised } from "../../../hooks";
 
 import {
   getComments,
@@ -10,14 +11,20 @@ import {
   deleteComment,
   updateComment,
 } from "../../../store/reducers/thunks/commentsSlice.thunks";
-import formatDate from "../../../lib/formatDate";
 
-import { CommentsContainer } from "../styles/comments.styles";
+import {
+  CommentsContainer,
+  ShowCommentsLabel,
+  ShowCommentsCheckBox,
+} from "../styles/comments.styles";
 import CommentOptions from "./CommentOptions";
 import WriteComment from "./WriteComment";
+import CommentBody from "./CommentBody";
 
 const Comments: React.FC = () => {
   const dispatch = useAppDispatch();
+
+  const isAuthorised = useIsAuthorised();
 
   const { videoId } = useParams();
 
@@ -77,52 +84,56 @@ const Comments: React.FC = () => {
     videoId && dispatch(getComments({ videoId }));
   }, [videoId]);
 
+  const [checked, setChecked] = useState<boolean>(false);
+
   return (
-    <CommentsContainer>
-      <WriteComment
-        activeUserAvatar={activeUserAvatar || ""}
-        activeUserName={activeUserName || ""}
-        handleComment={handleComment}
-        comment={comment}
-        setComment={setComment}
-        updatingCommentId={updatingCommentId}
+    <>
+      <ShowCommentsLabel htmlFor="show-more" className="show-comments__label">
+        {checked ? "hide comments" : "show comments"}
+      </ShowCommentsLabel>
+      <ShowCommentsCheckBox
+        type="checkbox"
+        hidden
+        id="show-more"
+        onChange={() => setChecked((prev) => !prev)}
       />
-      <div className="comments-list">
-        {comments.map((comm) => (
-          <div className="comment-item" key={comm._id}>
-            <figure className="comment-item__author-fig">
-              <img src={comm.author.avatar} alt="user" />
-            </figure>
-            <div className="comment-item__details-box">
-              <div className="comment-item__author-and--date">
-                <span className="comment-item__author-name">
-                  {comm.author.username}
-                </span>
-                <span className="comment-item__date-creation">
-                  {formatDate(comm.createdAt, "verbal")}
-                </span>
-              </div>
-              <p className="comment-item__text">{comm.description}</p>
+
+      <CommentsContainer className="comments--container">
+        {isAuthorised && (
+          <WriteComment
+            activeUserAvatar={activeUserAvatar || ""}
+            activeUserName={activeUserName || ""}
+            handleComment={handleComment}
+            comment={comment}
+            setComment={setComment}
+            updatingCommentId={updatingCommentId}
+          />
+        )}
+
+        <div className="comments-list">
+          {comments.map((comm) => (
+            <div className="comment-item" key={comm._id}>
+              <CommentBody comm={comm} />
+              {comm.author._id === activeUserId && (
+                <CommentOptions
+                  activeCommentOption={activeCommentOption}
+                  commentId={comm._id}
+                  setActiveCommentOption={() =>
+                    setActiveCommentOption((prev) =>
+                      prev === comm._id ? "" : comm._id
+                    )
+                  }
+                  updateCommentHandler={() =>
+                    updateCommentHandler(comm.description, comm._id)
+                  }
+                  deleteCommentHandler={() => deleteCommentHandler(comm._id)}
+                />
+              )}
             </div>
-            {comm.author._id === activeUserId && (
-              <CommentOptions
-                activeCommentOption={activeCommentOption}
-                commentId={comm._id}
-                setActiveCommentOption={() =>
-                  setActiveCommentOption((prev) =>
-                    prev === comm._id ? "" : comm._id
-                  )
-                }
-                updateCommentHandler={() =>
-                  updateCommentHandler(comm.description, comm._id)
-                }
-                deleteCommentHandler={() => deleteCommentHandler(comm._id)}
-              />
-            )}
-          </div>
-        ))}
-      </div>
-    </CommentsContainer>
+          ))}
+        </div>
+      </CommentsContainer>
+    </>
   );
 };
 

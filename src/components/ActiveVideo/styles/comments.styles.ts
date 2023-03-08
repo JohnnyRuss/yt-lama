@@ -16,7 +16,29 @@ const userFig = css`
   }
 `;
 
+export const ShowCommentsLabel = styled.label`
+  display: block;
+  margin: 0 auto;
+  width: max-content;
+  text-align: center;
+  display: none;
+
+  @media (max-width: 42.5em) {
+    display: block;
+  }
+`;
+
+export const ShowCommentsCheckBox = styled.input`
+  &:checked ~ .comments--container {
+    display: block;
+  }
+`;
+
 export const CommentsContainer = styled.div`
+  @media (max-width: 42.5em) {
+    display: none;
+  }
+
   .add-comment__field {
     display: flex;
     gap: 1rem;

@@ -3,13 +3,7 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { deleteFile } from "../../store/firebase";
 import { deleteVideo } from "../../store/reducers/thunks/videoSlice.thunks";
 
-import { Feed, Spinner } from "../Layouts";
-
-import styled from "styled-components";
-const ProfileContainer = styled.div`
-  position: relative;
-  width: 100%;
-`;
+import { Feed, Spinner, ContentContainer } from "../Layouts";
 
 export interface GetCredentialsForDeleteFileT {
   videoId: string;
@@ -39,14 +33,16 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <ProfileContainer>
+    <ContentContainer>
       {loadingStatus.loading && <Spinner />}
-      <Feed
-        videos={videos}
-        deletableCard={true}
-        onCardDelete={deleteVideoHandler}
-      />
-    </ProfileContainer>
+      {!loadingStatus.loading && (
+        <Feed
+          videos={videos}
+          deletableCard={true}
+          onCardDelete={deleteVideoHandler}
+        />
+      )}
+    </ContentContainer>
   );
 };
 

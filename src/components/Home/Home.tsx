@@ -1,13 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../store/hooks";
 
-import { Feed, Spinner } from "../Layouts";
-
-import styled from "styled-components";
-const HomeContainer = styled.div`
-  position: relative;
-  width: 100%;
-`;
+import { Feed, Spinner, ContentContainer } from "../Layouts";
 
 const Home: React.FC = () => {
   const { videos, loadingStatus } = useAppSelector(({ videos }) => ({
@@ -16,10 +10,10 @@ const Home: React.FC = () => {
   }));
 
   return (
-    <HomeContainer>
+    <ContentContainer>
       {loadingStatus.loading && <Spinner />}
-      <Feed videos={videos} />
-    </HomeContainer>
+      {!loadingStatus.loading && <Feed videos={videos} />}
+    </ContentContainer>
   );
 };
 

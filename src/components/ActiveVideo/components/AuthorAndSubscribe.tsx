@@ -1,5 +1,9 @@
 import React from "react";
+
 import { useAppSelector, useAppDispatch } from "../../../store/hooks";
+import { useIsAuthorised } from "../../../hooks";
+
+import { controllAuthModal } from "../../../store/reducers/authSlice";
 
 import {
   subscribeUser,
@@ -10,6 +14,8 @@ import { MdNotificationsActive, MdNotifications } from "react-icons/md";
 
 const AuthorAndSubscribe: React.FC = () => {
   const dispatch = useAppDispatch();
+
+  const isAuthorised = useIsAuthorised();
 
   const { avatar, username, subscribers, userId } = useAppSelector(
     ({ videos }) => ({
@@ -28,6 +34,14 @@ const AuthorAndSubscribe: React.FC = () => {
     return userId && subscribedUsers?.includes(userId);
   }
 
+  function handleSubscribe(e: React.MouseEvent) {
+    if (!isAuthorised) return dispatch(controllAuthModal(true));
+
+    isSubscribedUser()
+      ? dispatch(unsubscribeUser({ userId: userId || "" }))
+      : dispatch(subscribeUser({ userId: userId || "" }));
+  }
+
   return (
     <div className="channel-subscribe__container">
       <div className="channel-subscribe__container__chanel">
@@ -39,12 +53,9 @@ const AuthorAndSubscribe: React.FC = () => {
           <span>{subscribers} subscribers</span>
         </div>
       </div>
+      
       <button
-        onClick={() =>
-          isSubscribedUser()
-            ? dispatch(unsubscribeUser({ userId: userId || "" }))
-            : dispatch(subscribeUser({ userId: userId || "" }))
-        }
+        onClick={handleSubscribe}
         className={`channel-subscribe__container__subscribe ${
           isSubscribedUser() ? "subscribed" : ""
         }`}

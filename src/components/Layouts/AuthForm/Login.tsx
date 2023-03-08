@@ -1,19 +1,13 @@
 import React from "react";
-import { useAuthQuery } from "../../hooks";
+import { useAuthQuery } from "../../../hooks";
 
-const Register: React.FC = () => {
-  const { formRef, formHandler } = useAuthQuery({ type: "register" });
+const Login: React.FC = () => {
+  const { formRef, formHandler } = useAuthQuery({ type: "login" });
 
   return (
     <form className="auth-form" ref={formRef} onSubmit={formHandler}>
       <input
         type="text"
-        name="username"
-        className="inp-field"
-        placeholder="username"
-      />
-      <input
-        type="email"
         name="email"
         className="inp-field"
         placeholder="email"
@@ -25,10 +19,10 @@ const Register: React.FC = () => {
         placeholder="password"
       />
       <button className="confirm-btn" type="submit">
-        Sign up
+        Sign in
       </button>
     </form>
   );
 };
 
-export default Register;
+export default Login;

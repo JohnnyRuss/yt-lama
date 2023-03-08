@@ -18,7 +18,7 @@ const Subscribtions: React.FC = () => {
   return (
     <SubscribtionsContainer>
       {loadingStatus.loading && <Spinner />}
-      <Feed videos={videos} />
+      {!loadingStatus.loading && <Feed videos={videos} />}
     </SubscribtionsContainer>
   );
 };

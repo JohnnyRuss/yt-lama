@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import LayoutContainer from "./components/LayoutContainer/LayoutContainer";
 import TopNav from "./components/Navigation/TopNav";
@@ -12,6 +12,7 @@ const ExplorePage = lazy(() => import("./Pages/ExplorePage"));
 const SubscribtionsPage = lazy(() => import("./Pages/SubscribtionsPage"));
 const BookmarksPage = lazy(() => import("./Pages/BookmarksPage"));
 const ProfilePage = lazy(() => import("./Pages/ProfilePage"));
+const SearchPage = lazy(() => import("./Pages/SearchPage"));
 
 function App() {
   return (
@@ -21,11 +22,13 @@ function App() {
         <Navigation />
         <Suspense>
           <Routes>
+            <Route index element={<Navigate to="/home" />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/explore" element={<ExplorePage />} />
             <Route path="/subscribtions" element={<SubscribtionsPage />} />
             <Route path="/bookmarks" element={<BookmarksPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/:videoId" element={<ActiveVideoPage />} />
             <Route path="/auth/login" element={<AuthPage />} />
           </Routes>

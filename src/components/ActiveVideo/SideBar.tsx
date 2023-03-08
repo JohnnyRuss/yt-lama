@@ -1,33 +1,27 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import TimeAgo from "react-timeago";
 import { useAppSelector } from "../../store/hooks";
+import { CardX } from "../Layouts";
 
 import { SideBar as SideBarEl } from "./styles/activeVideo.styles";
 
 const SideBar: React.FC = () => {
-  const relatedVideos = useAppSelector(({ videos }) => videos.videos);
+  const { relatedVideos, activeVideo } = useAppSelector(({ videos }) => ({
+    relatedVideos: videos.videos,
+    activeVideo: videos.video?._id,
+  }));
 
   return (
     <SideBarEl>
-      {relatedVideos.map((thumb) => (
-        <Link to=":id" className="thumb" key={thumb._id}>
-          <figure className="thumb-fig">
-            <img src={thumb.thumbnail} alt={thumb.title} />
-          </figure>
-          <div className="thumb-details">
-            <p>{thumb.title}</p>
-            <p className="thumb-chanel">info</p>
-            <div className="thumb--views--date__container">
-              <div>
-                <span>{thumb.views.toLocaleString()}</span>
-                <span>views</span>
-              </div>
-              <TimeAgo date={thumb.createdAt} />
-            </div>
-          </div>
-        </Link>
-      ))}
+      {relatedVideos
+        .filter((video) => video._id !== activeVideo)
+        .map((thumb) => (
+          <CardX
+            video={thumb}
+            key={thumb._id}
+            playBack={false}
+            className="related-thumb"
+          />
+        ))}
     </SideBarEl>
   );
 };

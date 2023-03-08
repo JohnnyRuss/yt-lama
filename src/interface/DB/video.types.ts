@@ -36,3 +36,8 @@ interface VideoLabelUserT {
   username: string;
   avatar: string;
 }
+
+export interface VideoTitlesT {
+  _id: string;
+  title: string;
+}

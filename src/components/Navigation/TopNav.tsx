@@ -1,44 +1,34 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+
 import { useAppSelector } from "../../store/hooks";
+import { useIsAuthorised } from "../../hooks";
 
 import { TopNavContainer } from "./Nav.styles";
-import { BsSearch } from "react-icons/bs";
-import { BiVideoPlus } from "react-icons/bi";
 import UploadModal from "./UploadModal";
-import { useIsAuthorised } from "../../hooks";
+import Logo from "./Logo";
+import SearchBox from "./SearchBox";
+import { AuthForm } from "../Layouts";
+
+import { BiVideoPlus } from "react-icons/bi";
 
 const TopNav: React.FC = () => {
   const isAuthorised = useIsAuthorised();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const { avatar, username } = useAppSelector(({ auth }) => ({
+  const { avatar, username, openAuthPopUp } = useAppSelector(({ auth }) => ({
     avatar: auth.user?.avatar,
     username: auth.user?.username,
+    openAuthPopUp: auth.openAuthPopUp,
   }));
 
   return (
     <>
       <TopNavContainer>
-        <div className="logo-box">
-          <figure className="logo">
-            <img
-              src="https://www.freepnglogos.com/uploads/youtube-logo-hd-8.png"
-              alt=""
-            />
-          </figure>
-          <h1 className="logo-text">Tuber</h1>
-        </div>
+        <Logo />
 
-        <form action="" className="search-form">
-          <div className="search-wrapper">
-            <input type="text" placeholder="search" />
-            <button>
-              <BsSearch />
-            </button>
-          </div>
-        </form>
+        <SearchBox />
 
         {isAuthorised && (
           <div className="nav-user__add-video">
@@ -47,13 +37,16 @@ const TopNav: React.FC = () => {
             </button>
             <Link to="/profile">
               <figure className="user-fig">
-                <img src={avatar} alt={username} />
+                <img src={avatar} alt={username} loading="lazy" />
               </figure>
             </Link>
           </div>
         )}
       </TopNavContainer>
+
       {openModal && <UploadModal setOpenModal={setOpenModal} />}
+
+      {openAuthPopUp && <AuthForm isModal={true} />}
     </>
   );
 };

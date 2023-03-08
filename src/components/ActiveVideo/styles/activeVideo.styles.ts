@@ -6,6 +6,10 @@ export const ActiveVideoContainer = styled.div`
   gap: 1rem;
   flex: 1;
   padding: 1rem 0;
+
+  @media (max-width: 80em) {
+    flex-direction: column;
+  }
 `;
 
 export const MainThread = styled.div`
@@ -19,9 +23,16 @@ export const MainThread = styled.div`
     height: 30vw;
     width: 100%;
 
-    .frame {
-      width: 100%;
-      height: 100%;
+    @media (max-width: 60em) {
+      height: 44vw;
+    }
+
+    @media (max-width: 42.5em) {
+      height: 52vw;
+    }
+
+    @media (max-width: 30em) {
+      height: 60vw;
     }
   }
 
@@ -32,6 +43,8 @@ export const MainThread = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 
     &__views {
       display: flex;
@@ -65,7 +78,7 @@ export const MainThread = styled.div`
         align-items: center;
         gap: 0.5rem;
         font-size: 1.6rem;
-        
+
         svg {
           font-size: 2rem;
         }
@@ -132,6 +145,11 @@ export const MainThread = styled.div`
 
   .video-description {
     font-size: ${({ theme }) => theme.size.sm};
+
+    .show-more--desc__btn {
+      cursor: pointer;
+      ${({ theme }) => theme.font.bold}
+    }
   }
 `;
 
@@ -140,44 +158,23 @@ export const SideBar = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding: 0.5rem 1.5rem;
 
-  .thumb {
-    display: flex;
-    gap: 0.5rem;
-    height: 11rem;
+  @media (max-width: 80em) {
+    width: 100%;
 
-    .thumb-fig {
-      width: 40%;
-      height: 100%;
-      overflow: hidden;
-      border-radius: 0.5rem;
+    .related-thumb {
+      height: 22rem;
+    }
+  }
 
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-      }
+  @media (max-width: 61.25em) {
+    .related-thumb {
+      height: 16rem;
     }
 
-    .thumb-details {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      padding: 0.3rem 0;
-      width: 60%;
-
-      .thumb-chanel {
-        font-size: ${({ theme }) => theme.size.sm};
-      }
-
-      .thumb--views--date__container {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.75rem;
-        font-size: ${({ theme }) => theme.size.xsm};
-      }
+    [data-thumbx-fig] {
+      width: 30rem;
     }
   }
 `;

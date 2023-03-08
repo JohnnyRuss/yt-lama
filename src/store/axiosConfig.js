@@ -1,18 +1,19 @@
 import axios from "axios";
 import decode from "jwt-decode";
 import { PASSPORT_KEY } from "../lib/config";
+import { getAPI_Endpoint } from "../lib/config";
 
 export const axiosPublicQuery = axios.create({
-  baseURL: "http://localhost:4001/api/v1",
+  baseURL: getAPI_Endpoint(),
 });
 
 export const axiosPrivateQuery = axios.create({
-  baseURL: "http://localhost:4001/api/v1",
+  baseURL: getAPI_Endpoint(),
   withCredentials: true,
 });
 
 const refresh = axios.create({
-  baseURL: "http://localhost:4001/api/v1/authentication/refresh",
+  baseURL: `${getAPI_Endpoint()}/authentication/refresh`,
   withCredentials: true,
   method: "POST",
 });
@@ -44,7 +45,7 @@ function tokenExchange(config) {
         });
 
     exchangePromise.then((token) => {
-      localStorage.setItem(PASSPORT_KEY, token);
+      token && localStorage.setItem(PASSPORT_KEY, JSON.stringify(token));
       config.headers.authorization = `Bearer ${token}`;
       return config;
     });

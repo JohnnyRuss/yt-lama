@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { axiosPublicQuery } from "../../axiosConfig";
+import { axiosPrivateQuery, axiosPublicQuery } from "../../axiosConfig";
 import { AxiosError } from "axios";
 import { PASSPORT_KEY } from "../../../lib/config";
 
@@ -23,7 +23,10 @@ export const loginQuery = createAsyncThunk<
   { rejectValue: ErrorT }
 >("/auth/login", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await axiosPublicQuery.post("/authentication/login", body);
+    const { data } = await axiosPrivateQuery.post(
+      "/authentication/login",
+      body
+    );
     localStorage.setItem(PASSPORT_KEY, JSON.stringify(data.accessToken));
     return data.user;
   } catch (error: any) {
@@ -40,7 +43,7 @@ export const googleLoginQuery = createAsyncThunk<
   { rejectValue: ErrorT }
 >("/auth/google-auth", async (body, { rejectWithValue }) => {
   try {
-    const { data } = await axiosPublicQuery.post(
+    const { data } = await axiosPrivateQuery.post(
       "/authentication/google-auth",
       body
     );

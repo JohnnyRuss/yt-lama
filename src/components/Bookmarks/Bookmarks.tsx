@@ -1,13 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../store/hooks";
 
-import { Spinner, Feed } from "../Layouts";
-import styled from "styled-components";
-
-const BookmarksContainer = styled.div`
-  position: relative;
-  width: 100%;
-`;
+import { Spinner, Feed, ContentContainer } from "../Layouts";
 
 const Bookmarks: React.FC = () => {
   const { videos, loadingStatus } = useAppSelector(({ videos }) => ({
@@ -16,10 +10,10 @@ const Bookmarks: React.FC = () => {
   }));
 
   return (
-    <BookmarksContainer>
+    <ContentContainer>
       {loadingStatus.loading && <Spinner />}
-      <Feed videos={videos} />
-    </BookmarksContainer>
+      {!loadingStatus.loading && <Feed videos={videos} />}
+    </ContentContainer>
   );
 };
 

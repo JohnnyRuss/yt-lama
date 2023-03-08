@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+
+import { useIsAuthorised } from "../../../hooks";
 import { useAppSelector, useAppDispatch } from "../../../store/hooks";
+import { controllAuthModal } from "../../../store/reducers/authSlice";
 
 import {
   likeVideo,
@@ -20,6 +23,8 @@ import { MdOutlineAddCircle } from "react-icons/md";
 
 const VideoActions: React.FC = () => {
   const dispatch = useAppDispatch();
+
+  const isAuthorised = useIsAuthorised();
 
   const userID = useAppSelector(({ auth }) => auth.user?._id);
 
@@ -47,6 +52,8 @@ const VideoActions: React.FC = () => {
   }, [likes, dislikes, userID]);
 
   function saveVideoHandler() {
+    if (!isAuthorised) return dispatch(controllAuthModal(true));
+
     if (bookmarksIds.includes(id || ""))
       dispatch(unsaveVideo({ videoId: id || "" }));
     else dispatch(saveVideo({ videoId: id || "" }));
@@ -56,7 +63,10 @@ const VideoActions: React.FC = () => {
     <div className="view--actions__container__actions">
       <div className="actionField">
         <button
-          onClick={() => dispatch(likeVideo({ videoId: id || "" }))}
+          onClick={() => {
+            if (!isAuthorised) return dispatch(controllAuthModal(true));
+            dispatch(likeVideo({ videoId: id || "" }));
+          }}
           className="action-btn"
         >
           {existingUserReaction === "like" ? <AiFillLike /> : <AiOutlineLike />}
@@ -66,7 +76,10 @@ const VideoActions: React.FC = () => {
 
       <div className="actionField">
         <button
-          onClick={() => dispatch(dislikeVideo({ videoId: id || "" }))}
+          onClick={() => {
+            if (!isAuthorised) return dispatch(controllAuthModal(true));
+            dispatch(dislikeVideo({ videoId: id || "" }));
+          }}
           className="action-btn"
         >
           {existingUserReaction === "dislike" ? (

@@ -8,6 +8,11 @@ export const FeedContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(${thumb_w}, 1fr));
   grid-auto-rows: ${thumb_h};
-  gap: 1rem;
-  padding: 0.75rem;
+  gap: 2rem;
+  padding: 1rem 0.75rem;
+
+  @media (max-width: 42.5em) {
+    justify-items: center;
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;

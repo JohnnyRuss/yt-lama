@@ -1,9 +1,7 @@
 import React from "react";
-import { useAuthQuery } from "../../hooks";
+import { useAuthQuery } from "../../../hooks";
 
-interface GoogleAuthType {}
-
-const GoogleAuth: React.FC<GoogleAuthType> = (props) => {
+const GoogleAuth: React.FC = () => {
   const { googleAuthQuery } = useAuthQuery();
 
   return (

@@ -1,13 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import { PASSPORT_KEY } from "../../lib/config";
 
-import { AuthContainer } from "./login.styles";
-import Login from "./Login";
-import Register from "./Register";
-import GoogleAuth from "./GoogleAuth";
+import styled from "styled-components";
+import { AuthForm } from "../Layouts";
+
+const AuthContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
 
 interface LoginType {}
 
@@ -29,17 +35,7 @@ const Auth: React.FC<LoginType> = (props) => {
 
   return (
     <AuthContainer>
-      <div className="auth-box">
-        <div className="auth-head">
-          <span>Sign in</span>
-          <span>to continue to LamaTube</span>
-        </div>
-        <Login />
-        <span>or</span>
-        <GoogleAuth />
-        <span>or</span>
-        <Register />
-      </div>
+      <AuthForm />
     </AuthContainer>
   );
 };

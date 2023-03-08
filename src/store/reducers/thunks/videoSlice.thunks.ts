@@ -2,7 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { axiosPublicQuery, axiosPrivateQuery } from "../../axiosConfig";
 
-import { VideoT, VideoLabelT } from "../../../interface/DB/video.types";
+import {
+  VideoT,
+  VideoLabelT,
+  VideoTitlesT,
+} from "../../../interface/DB/video.types";
 
 export type KnownErrorT = { message: string } | undefined;
 
@@ -15,6 +19,10 @@ interface GetRelatedVideosArgsT {
 }
 
 interface ReactOnVideoArgsT {
+  videoId: string;
+}
+
+interface AddViewToVideoArgsT {
   videoId: string;
 }
 
@@ -33,6 +41,15 @@ interface UploadVideoArgsT {
 
 interface SaveVideoT {
   videoId: string;
+}
+
+interface SearchByTitleArgsT {
+  query: string;
+}
+
+interface SearchArgsT {
+  partial: string;
+  full: string;
 }
 
 export const getRandomVideos = createAsyncThunk<
@@ -86,7 +103,6 @@ export const getVideo = createAsyncThunk<
     const { data } = await axiosPrivateQuery(`/videos/${id}`);
     return data;
   } catch (error: any) {
-    console.log(error);
     const err: AxiosError<KnownErrorT> = error;
     return rejectWithValue(err.response?.data || { message: "" });
   }
@@ -101,7 +117,6 @@ export const deleteVideo = createAsyncThunk<
     await axiosPrivateQuery.delete(`/videos/${id}`);
     return id;
   } catch (error: any) {
-    console.log(error);
     const err: AxiosError<KnownErrorT> = error;
     return rejectWithValue(err.response?.data || { message: "" });
   }
@@ -235,6 +250,53 @@ export const getUserVideos = createAsyncThunk<
     const { data } = await axiosPrivateQuery(`/videos/user-uploads`);
 
     return data;
+  } catch (error: any) {
+    const err: AxiosError<KnownErrorT> = error;
+    return rejectWithValue(err.response?.data || { message: "" });
+  }
+});
+
+export const getVideosTitles = createAsyncThunk<
+  VideoTitlesT[],
+  SearchByTitleArgsT,
+  { rejectValue: KnownErrorT }
+>("/video/getVideosTitles", async ({ query }, { rejectWithValue }) => {
+  try {
+    const { data } = await axiosPublicQuery(
+      `/videos/search-by-title?search=${query}`
+    );
+
+    return data;
+  } catch (error: any) {
+    const err: AxiosError<KnownErrorT> = error;
+    return rejectWithValue(err.response?.data || { message: "" });
+  }
+});
+
+export const searchVideos = createAsyncThunk<
+  VideoLabelT[],
+  SearchArgsT,
+  { rejectValue: KnownErrorT }
+>("/video/sesrchVideos", async ({ full, partial }, { rejectWithValue }) => {
+  try {
+    const { data } = await axiosPublicQuery(
+      `/videos/search?full=${full}&partial=${partial}`
+    );
+
+    return data;
+  } catch (error: any) {
+    const err: AxiosError<KnownErrorT> = error;
+    return rejectWithValue(err.response?.data || { message: "" });
+  }
+});
+
+export const addViewToVideo = createAsyncThunk<
+  void,
+  AddViewToVideoArgsT,
+  { rejectValue: KnownErrorT }
+>("/video/addView", async ({ videoId }, { rejectWithValue }) => {
+  try {
+    await axiosPublicQuery.put(`/videos/${videoId}/view`);
   } catch (error: any) {
     const err: AxiosError<KnownErrorT> = error;
     return rejectWithValue(err.response?.data || { message: "" });

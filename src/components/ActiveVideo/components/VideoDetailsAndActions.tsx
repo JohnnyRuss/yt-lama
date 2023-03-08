@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppSelector } from "../../../store/hooks";
 
 import VideoActions from "./VideoActions";
@@ -11,6 +11,12 @@ const VideoDetailsAndActions: React.FC = () => {
     description: videos.video?.description,
   }));
 
+  const descriptionWordCount = description?.split(" ").length;
+
+  const [showAllDescription, setShowAllDescription] = useState<boolean>(
+    descriptionWordCount && descriptionWordCount > 50 ? false : true
+  );
+
   return (
     <>
       <h4 className="video-title">{title}</h4>
@@ -19,7 +25,22 @@ const VideoDetailsAndActions: React.FC = () => {
         <VideoActions />
       </div>
       <AuthorAndSubscribe />
-      <blockquote className="video-description">{description}</blockquote>
+      <blockquote className="video-description">
+        {!showAllDescription ? (
+          <>
+            {description?.split(" ").slice(0, 50).join(" ")}
+            &nbsp;
+            <button
+              className="show-more--desc__btn"
+              onClick={() => setShowAllDescription(true)}
+            >
+              show more
+            </button>
+          </>
+        ) : (
+          description
+        )}
+      </blockquote>
     </>
   );
 };

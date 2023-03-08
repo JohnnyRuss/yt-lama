@@ -15,6 +15,7 @@ interface StateT {
   };
   user: UserLabelT | null;
   isAuthenticated: boolean;
+  openAuthPopUp: boolean;
 }
 
 const initialState: StateT = {
@@ -25,6 +26,7 @@ const initialState: StateT = {
   },
   user: null,
   isAuthenticated: false,
+  openAuthPopUp: false,
 };
 
 const authSlice = createSlice({
@@ -58,6 +60,10 @@ const authSlice = createSlice({
         state.user.subscribedUsers = state.user?.subscribedUsers.filter(
           (user) => user !== userId
         );
+    },
+
+    controllAuthModal(state, { payload }: PayloadAction<boolean>) {
+      state.openAuthPopUp = payload;
     },
   },
   extraReducers: (builder) => {
@@ -157,4 +163,5 @@ export const {
   setGoogleAuthError,
   addNewSubscribedChanel,
   removeSubscribedChanel,
+  controllAuthModal,
 } = authSlice.actions;

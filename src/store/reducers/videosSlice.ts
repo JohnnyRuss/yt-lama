@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { stat } from "fs";
-import { VideoT, VideoLabelT } from "../../interface/DB/video.types";
+
+import {
+  VideoT,
+  VideoLabelT,
+  VideoTitlesT,
+} from "../../interface/DB/video.types";
+
 import {
   KnownErrorT,
   ReactOnVideoResT,
@@ -18,6 +23,9 @@ import {
   getBookmarksIds,
   getUserVideos,
   deleteVideo,
+  getVideosTitles,
+  searchVideos,
+  addViewToVideo,
 } from "./thunks/videoSlice.thunks";
 
 interface StateT {
@@ -37,6 +45,7 @@ interface StateT {
   videos: VideoLabelT[];
   video: VideoT | null;
   bookmarksIds: string[];
+  titles: VideoTitlesT[];
 }
 
 const initialState: StateT = {
@@ -56,6 +65,7 @@ const initialState: StateT = {
   videos: [],
   video: null,
   bookmarksIds: [],
+  titles: [],
 };
 
 interface EncreaseChanleSubscribersNumT {
@@ -388,7 +398,28 @@ const videosSlice = createSlice({
         (state, { payload }: PayloadAction<KnownErrorT>) => {
           state.uploadProgress.proccess = "passive";
         }
-      );
+      )
+      .addCase(getVideosTitles.pending, (state) => {})
+      .addCase(
+        getVideosTitles.fulfilled,
+        (state, { payload }: PayloadAction<VideoTitlesT[]>) => {
+          state.titles = payload;
+        }
+      )
+      .addCase(getVideosTitles.rejected, (state) => {})
+      .addCase(searchVideos.pending, (state) => {})
+      .addCase(
+        searchVideos.fulfilled,
+        (state, { payload }: PayloadAction<VideoLabelT[]>) => {
+          state.videos = payload;
+        }
+      )
+      .addCase(searchVideos.rejected, (state) => {})
+      .addCase(addViewToVideo.pending, (state) => {})
+      .addCase(addViewToVideo.fulfilled, (state) => {
+        if (state.video) state.video.views += 1;
+      })
+      .addCase(addViewToVideo.rejected, (state) => {});
   },
 });
 
