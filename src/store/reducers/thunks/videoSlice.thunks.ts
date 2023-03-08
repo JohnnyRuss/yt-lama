@@ -128,7 +128,7 @@ export const getRelatedVideos = createAsyncThunk<
   { rejectValue: KnownErrorT }
 >("/getRelatedVideos", async ({ tags }, { rejectWithValue }) => {
   try {
-    const { data } = await axiosPrivateQuery(`/videos/related?tags=${tags}`);
+    const { data } = await axiosPublicQuery(`/videos/related?tags=${tags}`);
     return data;
   } catch (error: any) {
     const err: AxiosError<KnownErrorT> = error;

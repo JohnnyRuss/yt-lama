@@ -63,7 +63,7 @@ export const logoutQuery = createAsyncThunk<
   { rejectValue: ErrorT }
 >("/auth/logout", async (body, { rejectWithValue }) => {
   try {
-    await axiosPublicQuery.post("/authentication/logout", body);
+    await axiosPrivateQuery.post("/authentication/logout", body);
     localStorage.removeItem(PASSPORT_KEY);
   } catch (error: any) {
     const err: AxiosError<ErrorT> = error;
