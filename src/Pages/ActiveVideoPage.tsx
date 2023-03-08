@@ -29,6 +29,7 @@ const ActiveVideoPage: React.FC = () => {
 
   useEffect(() => {
     videoId && dispatch(getVideo({ id: videoId }));
+    videoId && dispatch(addViewToVideo({ videoId }));
     isAuthoriosed && dispatch(getBookmarksIds());
   }, [videoId]);
 
@@ -36,10 +37,6 @@ const ActiveVideoPage: React.FC = () => {
     if (!videoIsLoading && video)
       dispatch(getRelatedVideos({ tags: video.tags.join(",") }));
   }, [videoIsLoading, videoId]);
-
-  useEffect(() => {
-    videoId && dispatch(addViewToVideo({ videoId }));
-  }, []);
 
   return <ActiveVideo />;
 };
