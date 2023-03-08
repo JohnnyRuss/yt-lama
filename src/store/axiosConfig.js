@@ -5,6 +5,7 @@ import { getAPI_Endpoint } from "../lib/config";
 
 export const axiosPublicQuery = axios.create({
   baseURL: getAPI_Endpoint(),
+  withCredentials: true,
 });
 
 export const axiosPrivateQuery = axios.create({

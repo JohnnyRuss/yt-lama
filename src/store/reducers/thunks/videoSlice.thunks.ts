@@ -108,6 +108,19 @@ export const getVideo = createAsyncThunk<
   }
 });
 
+export const addViewToVideo = createAsyncThunk<
+  void,
+  AddViewToVideoArgsT,
+  { rejectValue: KnownErrorT }
+>("/video/addView", async ({ videoId }, { rejectWithValue }) => {
+  try {
+    await axiosPublicQuery.put(`/videos/${videoId}/view`);
+  } catch (error: any) {
+    const err: AxiosError<KnownErrorT> = error;
+    return rejectWithValue(err.response?.data || { message: "" });
+  }
+});
+
 export const deleteVideo = createAsyncThunk<
   string,
   GetVideoArgsT,
@@ -284,19 +297,6 @@ export const searchVideos = createAsyncThunk<
     );
 
     return data;
-  } catch (error: any) {
-    const err: AxiosError<KnownErrorT> = error;
-    return rejectWithValue(err.response?.data || { message: "" });
-  }
-});
-
-export const addViewToVideo = createAsyncThunk<
-  void,
-  AddViewToVideoArgsT,
-  { rejectValue: KnownErrorT }
->("/video/addView", async ({ videoId }, { rejectWithValue }) => {
-  try {
-    await axiosPublicQuery.put(`/videos/${videoId}/view`);
   } catch (error: any) {
     const err: AxiosError<KnownErrorT> = error;
     return rejectWithValue(err.response?.data || { message: "" });
