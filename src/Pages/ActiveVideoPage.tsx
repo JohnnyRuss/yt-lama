@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { useIsAuthorised } from "../hooks";
+import { useIsAuthorised, useScrollUp } from "../hooks";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 import {
@@ -15,6 +15,8 @@ import {
 import ActiveVideo from "../components/ActiveVideo/ActiveVideo";
 
 const ActiveVideoPage: React.FC = () => {
+  useScrollUp();
+
   const dispatch = useAppDispatch();
 
   const isAuthoriosed = useIsAuthorised();

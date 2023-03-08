@@ -132,6 +132,7 @@ export const MainThread = styled.div`
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      color: ${({ theme }) => theme.colors.white};
 
       svg {
         font-size: 1.8rem;

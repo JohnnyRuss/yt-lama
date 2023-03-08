@@ -23,9 +23,9 @@ const AuthForm: React.FC<AuthFormType> = ({ isModal = false }) => {
         <span>to continue to LamaTube</span>
       </div>
       <Login />
-      <span>or</span>
+      <span className="devider">or</span>
       <GoogleAuth />
-      <span>or</span>
+      <span className="devider">or</span>
       <Register />
       {isModal && (
         <button

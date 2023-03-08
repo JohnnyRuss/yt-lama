@@ -80,4 +80,8 @@ export const AuthFormsContainer = styled.div<{ isModal?: boolean }>`
     background: ${({ theme }) => theme.colors.black};
     color: ${({ theme }) => theme.colors.white};
   }
+
+  .devider {
+    color: ${({ theme }) => theme.colors.white};
+  }
 `;

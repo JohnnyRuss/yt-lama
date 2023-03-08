@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import { useAppSelector } from "../../../store/hooks";
 
 import VideoActions from "./VideoActions";
@@ -11,11 +12,13 @@ const VideoDetailsAndActions: React.FC = () => {
     description: videos.video?.description,
   }));
 
-  const descriptionWordCount = description?.split(" ").length;
+  const [showAllDescription, setShowAllDescription] = useState<boolean>(true);
 
-  const [showAllDescription, setShowAllDescription] = useState<boolean>(
-    descriptionWordCount && descriptionWordCount > 50 ? false : true
-  );
+  useEffect(() => {
+    if (!description) return;
+    const count = description?.split(" ").length;
+    setShowAllDescription(count > 50 ? false : true);
+  }, [description]);
 
   return (
     <>
@@ -26,7 +29,9 @@ const VideoDetailsAndActions: React.FC = () => {
       </div>
       <AuthorAndSubscribe />
       <blockquote className="video-description">
-        {!showAllDescription ? (
+        {showAllDescription ? (
+          description
+        ) : (
           <>
             {description?.split(" ").slice(0, 50).join(" ")}
             &nbsp;
@@ -37,8 +42,6 @@ const VideoDetailsAndActions: React.FC = () => {
               show more
             </button>
           </>
-        ) : (
-          description
         )}
       </blockquote>
     </>
