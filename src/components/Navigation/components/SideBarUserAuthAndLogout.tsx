@@ -1,16 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../store/hooks";
-import { useAuthQuery } from "../../hooks";
+import { useAppSelector } from "../../../store/hooks";
+import { useAuthQuery } from "../../../hooks";
 
 import { FaRegUserCircle } from "react-icons/fa";
-import { UserAuthAndLogoutContainer } from "./Nav.styles";
+import * as Styled from "./styles/SideBarUserAuthAndLogout.styled";
 
-interface UserAuthAndLogoutT {
+interface SideBarUserAuthAndLogoutT {
   isAuthorised: boolean;
 }
 
-const UserAuthAndLogout: React.FC<UserAuthAndLogoutT> = ({ isAuthorised }) => {
+const SideBarUserAuthAndLogout: React.FC<SideBarUserAuthAndLogoutT> = ({
+  isAuthorised,
+}) => {
   const user = useAppSelector(({ auth }) => auth.user);
   const { userLogoutQuery } = useAuthQuery();
 
@@ -24,7 +26,7 @@ const UserAuthAndLogout: React.FC<UserAuthAndLogoutT> = ({ isAuthorised }) => {
   );
 
   return (
-    <UserAuthAndLogoutContainer>
+    <Styled.SideBarUserAuthAndLogout>
       {isAuthorised && (
         <>
           <div className="authorised-user--box">
@@ -51,8 +53,8 @@ const UserAuthAndLogout: React.FC<UserAuthAndLogoutT> = ({ isAuthorised }) => {
           </Link>
         </>
       )}
-    </UserAuthAndLogoutContainer>
+    </Styled.SideBarUserAuthAndLogout>
   );
 };
 
-export default UserAuthAndLogout;
+export default SideBarUserAuthAndLogout;

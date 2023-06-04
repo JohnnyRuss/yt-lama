@@ -60,6 +60,10 @@ export const CardContainer = styled.div`
       &__title {
         font-size: ${({ theme }) => theme.size.bg};
         padding-top: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
       &__channel {
@@ -88,9 +92,19 @@ export const CardContainer = styled.div`
     gap: 0.5rem;
     text-transform: capitalize;
     margin-left: auto;
+    color: ${({ theme }) => theme.colors.white};
 
     svg {
       font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 30em) {
+    .delete-btn {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 `;

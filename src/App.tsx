@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import LayoutContainer from "./components/LayoutContainer/LayoutContainer";
 import TopNav from "./components/Navigation/TopNav";
-import Navigation from "./components/Navigation/Navigation";
+import SideBar from "./components/Navigation/SideBar";
 import Spinner from "./components/Layouts/Spinner/Spinner";
 
 const HomePage = lazy(() => import("./Pages/HomePage"));
@@ -20,8 +20,8 @@ function App() {
     <>
       <TopNav />
       <LayoutContainer>
-        <Navigation />
-        <Suspense fallback={<Spinner/>}>
+        <SideBar />
+        <Suspense fallback={<Spinner />}>
           <Routes>
             <Route index element={<Navigate to="/home" />} />
             <Route path="/home" element={<HomePage />} />

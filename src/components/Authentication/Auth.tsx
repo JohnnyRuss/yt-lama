@@ -17,7 +17,7 @@ const AuthContainer = styled.div`
 
 interface LoginType {}
 
-const Auth: React.FC<LoginType> = (props) => {
+const Auth: React.FC<LoginType> = () => {
   const navigate = useNavigate();
   const { isAuthenticated, loading } = useAppSelector(({ auth }) => ({
     isAuthenticated: auth.isAuthenticated,

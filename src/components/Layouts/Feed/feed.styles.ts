@@ -1,13 +1,10 @@
 import styled from "styled-components";
 
-const thumb_h = "28rem";
-const thumb_w = "35rem";
-
 export const FeedContainer = styled.div`
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(${thumb_w}, 1fr));
-  grid-auto-rows: ${thumb_h};
+  grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
+  grid-auto-rows: auto;
   gap: 2rem;
   padding: 1rem 0.75rem;
 

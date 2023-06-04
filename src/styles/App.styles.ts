@@ -52,4 +52,14 @@ export const AppStyles = createGlobalStyle`
       background: none;
       cursor: pointer;
     }
+
+    body:has(input[data-burger]:checked) [data-sidebar]{
+      @media (max-width:42.5em){
+        display: flex;
+        position: fixed;
+        top: 5rem;
+        z-index: 9;
+        padding-top: 4.5rem;
+      }
+    }
 `;

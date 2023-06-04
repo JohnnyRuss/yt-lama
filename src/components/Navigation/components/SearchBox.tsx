@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { getVideosTitles } from "../../store/reducers/thunks/videoSlice.thunks";
+
+import { useAppSelector, useAppDispatch } from "../../../store/hooks";
+import { getVideosTitles } from "../../../store/reducers/thunks/videoSlice.thunks";
 
 import { BsSearch } from "react-icons/bs";
+import * as Styled from "./styles/SearchBox.styled";
 
 const SearchBox: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +19,7 @@ const SearchBox: React.FC = () => {
 
   useEffect(() => {
     if (!searchKey) return;
-    
+
     const timeout = setTimeout(() => {
       dispatch(getVideosTitles({ query: searchKey }));
     }, 1000);
@@ -37,7 +39,7 @@ const SearchBox: React.FC = () => {
   // }
 
   return (
-    <form className="search-form">
+    <Styled.SearchBox className="search-form">
       <div className="search-wrapper">
         <div className="search-field__box">
           <input
@@ -74,7 +76,7 @@ const SearchBox: React.FC = () => {
           <BsSearch />
         </button>
       </div>
-    </form>
+    </Styled.SearchBox>
   );
 };
 

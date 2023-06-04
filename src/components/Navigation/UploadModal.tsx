@@ -6,8 +6,8 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { uploadVideo } from "../../store/reducers/thunks/videoSlice.thunks";
 import { resetUploadProgress } from "../../store/reducers/videosSlice";
 
-import { UploadContainer } from "./Nav.styles";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import * as Styled from "./styles/UploadModal.styled";
 
 interface UploadModalType {
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -98,7 +98,7 @@ const UploadModal: React.FC<UploadModalType> = ({ setOpenModal }) => {
   }, [progress]);
 
   return (
-    <UploadContainer onClick={() => setOpenModal(false)}>
+    <Styled.UploadModal onClick={() => setOpenModal(false)}>
       <div
         className="modal-window__wrapper"
         onClick={(e) => e.stopPropagation()}
@@ -199,7 +199,7 @@ const UploadModal: React.FC<UploadModalType> = ({ setOpenModal }) => {
           </button>
         </form>
       </div>
-    </UploadContainer>
+    </Styled.UploadModal>
   );
 };
 

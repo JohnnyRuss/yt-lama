@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 import { useAppSelector } from "../../store/hooks";
 import { useIsAuthorised } from "../../hooks";
 
-import { TopNavContainer } from "./Nav.styles";
-import UploadModal from "./UploadModal";
-import Logo from "./Logo";
-import SearchBox from "./SearchBox";
 import { AuthForm } from "../Layouts";
-
-import { BiVideoPlus } from "react-icons/bi";
+import UploadModal from "./UploadModal";
+import Logo from "./components/Logo";
+import SearchBox from "./components/SearchBox";
+import TopNavAddVideoAndUserFig from "./components/TopNavAddVideoAndUserFig";
+import Burger from "./components/Burger";
+import * as Styled from "./styles/TopNav.styled";
 
 const TopNav: React.FC = () => {
   const isAuthorised = useIsAuthorised();
@@ -25,24 +24,21 @@ const TopNav: React.FC = () => {
 
   return (
     <>
-      <TopNavContainer>
+      <Styled.TopNav>
+        <Burger />
+
         <Logo />
 
         <SearchBox />
 
         {isAuthorised && (
-          <div className="nav-user__add-video">
-            <button onClick={() => setOpenModal(true)}>
-              <BiVideoPlus />
-            </button>
-            <Link to="/profile">
-              <figure className="user-fig">
-                <img src={avatar} alt={username} loading="lazy" />
-              </figure>
-            </Link>
-          </div>
+          <TopNavAddVideoAndUserFig
+            avatar={avatar || ""}
+            username={username || ""}
+            setOpenModal={setOpenModal}
+          />
         )}
-      </TopNavContainer>
+      </Styled.TopNav>
 
       {openModal && <UploadModal setOpenModal={setOpenModal} />}
 
