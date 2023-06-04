@@ -12,16 +12,37 @@ const SearchBox: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
   const [searchKey, setSearchKey] = useState<string>("");
+  const [activeSearch, setActiveSearch] = useState<boolean>(false);
 
   const providedResults = useAppSelector(({ videos }) => videos.titles);
+
+  function handleClick(title: string) {
+    setSearchKey("");
+    setActiveSearch(false);
+
+    navigate("/search", {
+      state: {
+        partial: searchKey,
+        full: title,
+      },
+    });
+  }
+
+  function handleBodyClick(ev: MouseEvent) {
+    if ((ev.target as Element).closest(".search-wrapper")) return;
+
+    setSearchKey("");
+    setActiveSearch(false);
+  }
 
   useEffect(() => {
     if (!searchKey) return;
 
+    if (!activeSearch) setActiveSearch(true);
+
     const timeout = setTimeout(() => {
-      dispatch(getVideosTitles({ query: searchKey }));
+      searchKey && dispatch(getVideosTitles({ query: searchKey }));
     }, 1000);
 
     return () => {
@@ -29,14 +50,13 @@ const SearchBox: React.FC = () => {
     };
   }, [searchKey]);
 
-  // function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
-  //   console.log(e.currentTarget);
-  //   if (e.currentTarget.closest(".search-modal")) {
-  //     console.log(1);
-  //   } else {
-  //     console.log(2);
-  //   }
-  // }
+  useEffect(() => {
+    activeSearch && document.addEventListener("click", handleBodyClick);
+
+    return () => {
+      document.removeEventListener("click", handleBodyClick);
+    };
+  }, [activeSearch]);
 
   return (
     <Styled.SearchBox className="search-form">
@@ -45,27 +65,13 @@ const SearchBox: React.FC = () => {
           <input
             type="text"
             placeholder="search"
-            onFocus={() => setOpenSearchModal(true)}
-            // onBlur={handleBlur}
             onChange={(e) => setSearchKey(e.target.value)}
             value={searchKey}
           />
-          {openSearchModal && (
+          {searchKey && (
             <div className="search-modal">
               {providedResults.map((r) => (
-                <p
-                  onClick={() => {
-                    setOpenSearchModal(false);
-                    setSearchKey("");
-                    navigate("/search", {
-                      state: {
-                        partial: searchKey,
-                        full: r.title,
-                      },
-                    });
-                  }}
-                  key={r._id}
-                >
+                <p onClick={() => handleClick(r.title)} key={r._id}>
                   {r.title}
                 </p>
               ))}
